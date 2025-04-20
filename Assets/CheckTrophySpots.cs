@@ -11,7 +11,7 @@ public class CheckWinCondition : MonoBehaviour
     {
         if (goldCube.inCorrectPosition && silverCube.inCorrectPosition && bronzeCube.inCorrectPosition)
         {
-            finalCube.SetActive(false); // Make the FinalCube disappear
+            finalCube.SetActive(true); // Make the FinalCube appear
         }
     }
 }
