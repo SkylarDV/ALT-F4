@@ -1,36 +1,28 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.UI;
 
-public class BlackoutOnGrab : MonoBehaviour
+public class TeleportOnGrab : MonoBehaviour
 {
-    public XRGrabInteractable grabInteractable; // The object that can be grabbed
-    public Image blackoutImage; // The image that will turn the screen black
+    public Transform teleportDestination; // Where to teleport
+    public GameObject playerRig; // Player's rig (Camera Rig / XR Origin)
 
-    private bool isGrabbed = false; // A flag to ensure the screen only turns black once
+    private XRGrabInteractable grabInteractable;
 
     void Start()
     {
-        if (grabInteractable == null || blackoutImage == null)
-        {
-            Debug.LogError("Grab Interactable or Blackout Image is not assigned!");
-            return;
-        }
-
-        // Make the blackout image invisible at the start
-        blackoutImage.enabled = false;
-
-        // Subscribe to the grab event
-        grabInteractable.onSelectEntered.AddListener(OnGrabbed);
+        grabInteractable = GetComponent<XRGrabInteractable>();
+        grabInteractable.selectEntered.AddListener(OnGrab);
     }
 
-    // Called when the object is grabbed
-    private void OnGrabbed(XRBaseInteractor interactor)
+    void OnGrab(SelectEnterEventArgs args)
     {
-        if (!isGrabbed) // Only apply blackout once
+        // Teleport the player
+        if (playerRig != null && teleportDestination != null)
         {
-            blackoutImage.enabled = true; // Show the black screen
-            isGrabbed = true; // Set the flag to prevent further changes
+            playerRig.transform.position = teleportDestination.position;
         }
+
+        // Destroy this object
+        Destroy(gameObject);
     }
 }
